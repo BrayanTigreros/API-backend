@@ -2,10 +2,14 @@ const mysql = require('mysql2/promise');
 
 // Establecer la conexión con la base de datos
 const connection = mysql.createPool({
-    host: '127.0.0.1',
-    user: 'root',
-    password: 'david664',
-    database: 'usuariosMS'
+    host: process.env.DB_HOST || 'mysql', // Usar el nombre del servicio Docker
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'david664',
+    database: process.env.DB_NAME || 'usuariosMS',
+    port: process.env.DB_PORT || 3306,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 // Obtener todos los usuarios
@@ -42,9 +46,9 @@ async function validarUsuario(usuario, password) {
 }
 
 // Crear un nuevo usuario, incluyendo el rol
-async function crearUsuario(nombre, email, usuario, password, telefono, cedula, direccion, rol = 'usuario') {
-    const [result] = await connection.query('INSERT INTO usuarios (nombre, email, usuario, password, telefono, cedula, direccion, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', 
-        [nombre, email, usuario, password, telefono, cedula, direccion, rol]);
+async function crearUsuario(nombre, email, usuario, password, telefono, cedula, direccion) {
+    const [result] = await connection.query('INSERT INTO usuarios (nombre, email, usuario, password, telefono, cedula, direccion) VALUES (?, ?, ?, ?, ?, ?, ?)', 
+        [nombre, email, usuario, password, telefono, cedula, direccion]);
     return result;
 }
 

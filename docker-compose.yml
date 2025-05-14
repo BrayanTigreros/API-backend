@@ -7,10 +7,15 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: david664
     ports:
-      - "3307:3307"
+      - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
 
   usuarios:
     build:
@@ -18,9 +23,11 @@ services:
       dockerfile: Dockerfile
     container_name: usuarios_ms
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       DB_HOST: mysql
+      DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: david664
       DB_NAME: usuariosMS
@@ -33,9 +40,11 @@ services:
       dockerfile: Dockerfile
     container_name: productos_ms
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       DB_HOST: mysql
+      DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: david664
       DB_NAME: productosMS
@@ -48,9 +57,11 @@ services:
       dockerfile: Dockerfile
     container_name: garantias_ms
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       DB_HOST: mysql
+      DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: david664
       DB_NAME: garantiasMS
@@ -63,9 +74,11 @@ services:
       dockerfile: Dockerfile
     container_name: envios_ms
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     environment:
       DB_HOST: mysql
+      DB_PORT: 3306
       DB_USER: root
       DB_PASSWORD: david664
       DB_NAME: enviosMS

@@ -1,10 +1,14 @@
 const mysql = require('mysql2/promise');
 
-const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'david664',
-  database: 'garantiasMS'
+const connection = mysql.createPool({
+    host: process.env.DB_HOST || 'mysql', // Usar el nombre del servicio Docker
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'david664',
+    database: process.env.DB_NAME || 'garantiasMS',
+    port: process.env.DB_PORT || 3306,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 // Obtener todas las garantías

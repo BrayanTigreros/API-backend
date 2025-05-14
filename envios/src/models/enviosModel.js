@@ -1,10 +1,13 @@
 const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: 'david664',
-  database: 'enviosMS',
+  host: process.env.DB_HOST || 'mysql',  // Cambia 'localhost' por 'mysql'
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || 'david664',
+  database: process.env.DB_NAME || 'enviosMS',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
 // Obtener todos los envíos

@@ -1,9 +1,14 @@
 const mysql = require('mysql2/promise');
+
 const connection = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: 'david664',
-    database: 'productosMS'
+    host: process.env.DB_HOST || 'mysql',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || 'david664',
+    database: process.env.DB_NAME || 'productosMS',
+    port: process.env.DB_PORT || 3306,
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
 async function traerProductos() {
