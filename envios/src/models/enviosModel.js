@@ -1,18 +1,22 @@
+// Verifica que este bloque no tenga problemas
 const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'mysql',  // Cambia 'localhost' por 'mysql'
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'david664',
-  database: process.env.DB_NAME || 'enviosMS',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+   host: process.env.DB_HOST || 'mysql',
+   user: process.env.DB_USER || 'root',
+   password: process.env.DB_PASSWORD || 'david664',
+   database: process.env.DB_NAME || 'enviosMS',
+   port: process.env.DB_PORT || 3306,
+   waitForConnections: true,
+   connectionLimit: 10,
+   queueLimit: 0
 });
+
+console.log("Pool creado:", pool);
 
 // Obtener todos los envíos
 async function traerEnvios() {
-  const [rows] = await pool.query('SELECT usuario, direccion, telefono, cedula, fecha_envio, fecha_entrega, estado_envio FROM envios');
+  const [rows] = await pool.query('SELECT * FROM envios');
   return rows;
 }
 

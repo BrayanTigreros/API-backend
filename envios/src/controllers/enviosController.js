@@ -3,6 +3,8 @@ const axios = require('axios');
 const router = Router();
 const enviosModel = require('../models/enviosModel');
 
+console.log("Modelo de envíos cargado:", enviosModel);
+
 // Obtener envíos
 router.get('/', async (req, res) => {
     try {
@@ -26,11 +28,11 @@ router.get('/envios/:usuario', async (req, res) => {
         const envio = result[0];  // Tomamos el primer resultado
 
         // Obtener los datos actualizados del usuario desde usuariosMS
-        const respuestaUsuario = await axios.get(`http://192.168.100.3:3002/usuarios/${envio.usuario}`);
+        const respuestaUsuario = await axios.get(`http://192.168.100.2:3002/usuarios/${envio.usuario}`);
         const datosUsuario = respuestaUsuario.data;
 
         // Obtener los datos actualizados del producto desde productosMS
-        const respuestaProducto = await axios.get(`http://192.168.100.3:3001/productos/${envio.producto_id}`);
+        const respuestaProducto = await axios.get(`http://192.168.100.2:3001/productos/${envio.producto_id}`);
         const datosProducto = respuestaProducto.data;
 
         // Responder con el envío, pero agregando la información actualizada del usuario y producto
@@ -61,14 +63,14 @@ router.post('/', async (req, res) => {
         const { usuario, metodo_pago, numero_tarjeta, fecha_caducidad, codigo_cvv, producto_id } = req.body;
 
         // Obtener los datos del usuario desde el MS de usuarios
-        const respuesta = await axios.get(`http://192.168.100.3:3002/usuarios/${usuario}`);
+        const respuesta = await axios.get(`http://192.168.100.2:3002/usuarios/${usuario}`);
         const datosUsuario = respuesta.data;
         if (!datosUsuario) {
             return res.status(400).json({ error: "El usuario no existe en la base de datos." });
         }
 
         // Obtener datos del producto desde el MS de productos
-        const respuestaProducto = await axios.get(`http://192.168.100.3:3001/productos/${producto_id}`);
+        const respuestaProducto = await axios.get(`http://192.168.100.2:3001/productos/${producto_id}`);
         const datosProducto = respuestaProducto.data;
         if (!datosProducto) {
             return res.status(400).json({ error: "El producto no existe o no se pudo obtener la información." });

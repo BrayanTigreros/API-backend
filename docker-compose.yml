@@ -3,7 +3,6 @@ version: '3.8'
 services:
   mysql:
     image: mysql:8.0
-    container_name: proyecto_mysql
     environment:
       MYSQL_ROOT_PASSWORD: david664
     ports:
@@ -18,13 +17,9 @@ services:
       retries: 10
 
   usuarios:
-    build:
-      context: ./usuarios
-      dockerfile: Dockerfile
-    container_name: usuarios_ms
+    image: brayan333/usuarios:latest
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
@@ -35,13 +30,9 @@ services:
       - "3002:3002"
 
   productos:
-    build:
-      context: ./productos
-      dockerfile: Dockerfile
-    container_name: productos_ms
+    image: brayan333/productos:latest
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
@@ -52,13 +43,9 @@ services:
       - "3001:3001"
 
   garantias:
-    build:
-      context: ./garantias
-      dockerfile: Dockerfile
-    container_name: garantias_ms
+    image: brayan333/garantias:latest
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
@@ -69,13 +56,9 @@ services:
       - "3004:3004"
 
   envios:
-    build:
-      context: ./envios
-      dockerfile: Dockerfile
-    container_name: envios_ms
+    image: brayan333/envios:latest
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
     environment:
       DB_HOST: mysql
       DB_PORT: 3306
